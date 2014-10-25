@@ -1,0 +1,53 @@
+svg(version="1.1" xmlns="http://www.w3.||g/2000/svg" height="100%" width="100%" viewBox="-0.25 -0.25 100.5 100.5")
+    g.cells
+        - var x = 0
+        while x < 23
+            - var y = 0
+            while y < 25
+                if showCell(y,x + 1)
+                    rect.cell(x=(x * 4) y=(y * 4) width="4" height="4" fill="white" stroke="#111" stroke-width="0.25")
+                - y++
+            - x++
+    g.rooms
+        g#cuisine
+            polygon(points="0,4 0,24 4,24 4,28 20,28 20,4")
+            path(d="M 0,4 L 0,24 L 4,24 L 4,28 L 12,28 M 16,28 L 20,28 L 20,4 L 0,4")
+            text(x="10" y="16.5") Cuisine
+        g#grandSalon
+            polygon(points="36,4 52,4 52,8 60,8 60,32 28,32 28,8 36,8")
+            path(d="M 36,4 L 52,4 L 52,8 L 60,8 L 60,20 M 60,24 L 60,32 L 56,32 M 52,32 L 36,32 M 32,32 L 28,32 L 28,24 M 28,20 L 28,8 L 36,8 L 36,4")
+            text(x="44" y="20") Grand Salon
+        g#petitSalon
+            polygon(points="68,4 92,4 92,20 88,20 88,24 72,24 72,20 68,20")
+            path(d="M 68,4 L 92,4 L 92,20 L 88,20 L 88,24 L 72,24 L 72,20 M 68,20 L 68,4")
+            text(x="80" y="14.5") Petit Salon
+        g#bureau
+            polygon(points="68,32 92,32 92,52 68,52")
+            path(d="M 68,32 L 92,32 L 92,52 L 68,52 L 68,40 M 68,36 L 68,32")
+            text(x="80" y="43") Bureau
+        g#bibliotheque
+            polygon(points="68,56 88,56 88,60 92,60 92,72 88,72 88,76 68,76 68,72 64,72 64,60 68,60")
+            path(d="M 68,56 L 76,56 M 80,56 L 88,56 L 88,60 L 92,60 L 92,72 L 88,72 L 88,76 L 68,76 L 68,72 L 64,72 L 64,68 M 64,64 L 64,60 L 68,60 L 68,56")
+            text(x="78" y="67") Bibliotheque
+        g#studio
+            polygon(points="64,84 88,84 88,100 68,100 68,96 64,96")
+            path(d="M 68,84 L 88,84 L 88,100 L 68,100 L 68,96 L 64,96 L 64,84")
+            text(x="77" y="93") Studio
+        g#hall
+            polygon(points="32,72 56,72 56,100 32,100")
+            path(d="M 32,72 L 40,72 M 48,72 L 56,72 L 56,100 L 32,100 L 32,72")
+            text(x="45" y="87") Hall
+        g#veranda
+            polygon(points="0,76 24,76 24,96 20,96 20,100 0,100")
+            path(d="M 0,76 L 20,76 M 24,76 L 24,96 L 20,96 L 20,100 L 0,100 L 0,76")
+            text(x="12" y="87") Veranda
+        g#salleAManger
+            polygon(points="0,36 16,36 16,40 28,40 28,64 0,64")
+            path(d="M 0,36 L 16,36 L 16,40 L 28,40 L 28,48 M 28,52 L 28,64 L 24,64 M 20,64 L 0,64 L 0,36")
+            text(x="14" y="52") Salle a manger
+        g#middle
+            polygon(points="36,40 56,40 56,68 36,68")
+            text(x="46" y="62.5" style="font-size: 25px;" fill="white") ?
+
+    g.pions
+        circle(ng-repeat="pion in pions" ng-attr-cx="{{ (pion.x * 4) + 2 }}" ng-attr-cy="{{ (pion.y * 4) + 2 }}" r="1.5" ng-attr-fill="{{ pion.color }}")

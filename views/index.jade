@@ -1,0 +1,91 @@
+doctype html
+html(lang="fr" ng-app="ClueApp")
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        title Cluedo
+        link(rel="stylesheet", href="/bower/bootstrap.min.css")
+        link(rel="stylesheet", href="plateau.css")
+        script(src="/socket.io/socket.io.js")
+        script(src="/bower/jquery.min.js")
+        script(src="/bower/angular.min.js")
+        script(src="/data")
+        script(src="app.js")
+        script(src="player.js")
+    body(ng-controller="PlayerCtrl" ng-cloak)
+        .container
+            h1 Equipe {{ team }}
+            .row.btn-group(ng-show="canRoll")
+                button.btn.btn-primary(type="button" ng-click="roll()") Lancer les dés
+                button.btn.btn-default(type="button" ng-click="accuse()") Faire un accusation
+            .row.panel.panel-default(ng-show="view == 'propose'")
+                .panel-body
+                    form.form-horizontal(name="propForm" role="form")
+                        .form-group
+                            label.col-sm-2.control-label Suspect:
+                            .col-sm-10
+                                label.radio-inline(ng-repeat="name in cards['suspects']" ng-class="{'text-owned': data[name].owned, 'text-seen': data[name].seen, 'text-proposed': data[name].proposed, 'bg-checked': data[name].checked}")
+                                    input(type="radio" ng-model="$parent.propSuspect" name="propSuspect" value="{{name}}")
+                                    | {{ name }}
+                        .form-group
+                            label.col-sm-2.control-label Arme:
+                            .col-sm-10
+                                label.radio-inline(ng-repeat="name in cards['weapons']" ng-class="{'text-owned': data[name].owned, 'text-seen': data[name].seen, 'text-proposed': data[name].proposed, 'bg-checked': data[name].checked}")
+                                    input(type="radio" ng-model="$parent.propWeapon" name="propWeapon" value="{{name}}")
+                                    | {{ name }}
+                        .form-group
+                            label.col-sm-2.control-label Piece:
+                            .col-sm-10(ng-show="room !== null || room !== false")
+                                p.form-control-static {{ room }}
+                            .col-sm-10(ng-show="room === null || room === false")
+                                label.radio-inline(ng-repeat="name in cards['rooms']" ng-class="{'text-owned': data[name].owned, 'text-seen': data[name].seen, 'text-proposed': data[name].proposed, 'bg-checked': data[name].checked}")
+                                    input(type="radio" ng-model="$parent.propRoom" name="propRoom" value="{{name}}")
+                                    | {{ name }}
+                        .form-group
+                            .col-sm-offset-2.col-sm-10
+                                button.btn.btn-primary(type="button" ng-click="!!room ? validateProp() : sendAccuse()") Valider
+            .row(ng-show="view == 'move'")
+                include plateau-svg
+            .row(ng-show="view == 'refute'")
+                h2 Montrer un carte:
+                .btn-group
+                    button.btn.btn-primary(type="button" ng-repeat="card in refute" ng-click="doRefute(card)") {{card}}
+                    button.btn.btn-primary(type="button" ng-if="refute.length == 0" ng-click="doRefute(null)") Ne pas montrer de carte
+            .row(ng-show="view == 'list' || view == 'propose'")
+                ul.list-group(ng-repeat="c in cat" ng-init="category = cards[c]")
+                        li.list-group-item(ng-repeat="name in category" ng-class="{'list-group-item-success': data[name].owned, 'list-group-item-info': data[name].seen}")
+                            .checkbox
+                                label
+                                    input(type="checkbox" ng-model="data[name].checked")
+                                    | {{ name }}
+        .modal.fade#peekModal(tabindex="-1" role="dialog" ng-class="{in: showPeek}")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        h4.modal-title Hypothèse infirmée
+                        button(type="button" class="close" ng-click="closePeek()")
+                            span(aria-hidden="true") &times;
+                            span.sr-only Fermer
+                    .modal-body
+                        p L'équipe {{ peekTeam }} vous a montré la carte {{ peekCard }}.
+                    .modal-footer
+                        button.btn.btn-primary(ng-click="closePeek()") Fermer
+        .modal.fade#winModal(tabindex="-1" role="dialog" ng-class="{in: solution === true}")
+            .modal-dialog
+                .modal-content
+                    .modal-body
+                        p Vous avez trouvé la solution du mystère.
+        .modal.fade#loseModal(tabindex="-1" role="dialog" ng-class="{in: (!hideLose) && solution === false}")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        h4.modal-title Game Over
+                        button(type="button" class="close" ng-click="closeLose()")
+                            span(aria-hidden="true") &times;
+                            span.sr-only Fermer
+                    .modal-body
+                        p Il ne s'agissait pas de la bonne solution, vous êtes désormais éliminé.
+                    .modal-footer
+                        button.btn.btn-primary(ng-click="closeLose()") Fermer
+        .modal-backdrop.fade(ng-class="{in: showPeek || ((!hideLose) && solution !== null)}")

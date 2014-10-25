@@ -1,0 +1,66 @@
+doctype html
+html(lang="fr" ng-app="ClueApp")
+    head
+        title Cluedo - Plateau
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="/bower/bootstrap.min.css")
+        link(rel="stylesheet", href="plateau.css")
+        script(src="/socket.io/socket.io.js")
+        script(src="/bower/jquery.min.js")
+        script(src="/bower/angular.min.js")
+        script(src="/bower/bootstrap.min.js")
+        script(src="app.js")
+        script(src="plateau.js")
+    body(ng-controller="PlateauCtrl" ng-cloak)
+        .container
+            include plateau-svg
+        .modal.fade#startModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'start'}")
+            .modal-dialog
+                .modal-content
+                    .modal-header.text-center
+                        img(src=addrCode)
+                    .modal-body
+                        p(ng-if="(pions|length) == 0") Aucune équipe n'est connecté
+                        p(ng-repeat="(name, pion) in pions") Equipe {{ name }}
+                    .modal-footer
+                        button.btn.btn-primary.btn-block#start(type="button" ng-click="onStart()" ng-disabled="(pions|length) < 3") Commencer
+        .modal.fade#diceModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'dice'}")
+            .modal-dialog
+                .modal-content
+                    .modal-body.text-center
+                        each dice in ['d1', 'd2']
+                            section.diceContainer(class="cont" + dice)
+                                .dice(ng-class="'show-' + " + dice)
+                                    figure.face-1 1
+                                    figure.face-2 2
+                                    figure.face-3 3
+                                    figure.face-4 4
+                                    figure.face-5 5
+                                    figure.face-6 6
+        .modal.fade#propModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'prop'}")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        h4.modal-title Hypothèse de l'équipe {{ currProp.team }}
+                    .modal-body
+                        p Le meutre a été commis par {{ currProp.info.suspect }} avec l'arme {{ currProp.info.weapon }} dans la pièce {{ currProp.info.room }}
+        .modal.fade#winModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'won'}")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        h4.modal-title L'équipe {{ winner.team }} a résolu l'énigme.
+                    .modal-body
+                        p Le meurtre avait été commis par {{ winner.res.murderer }} avec l'arme {{ winner.res.weapon }} dans la pièce {{ winner.res.room }}.
+        .modal.fade#loseModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'lost'}")
+            .modal-dialog
+                .modal-content
+                    .modal-body
+                        h2.modal-title L'équipe {{ loser }} n'a pas trouvé la bonne réponse et est éliminée.
+                    .modal-footer
+                        button.btn.btn-primary(type="button" ng-click="dismissLost()") Continuer
+        .modal.fade#turnModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'turn'}")
+            .modal-dialog
+                .modal-content
+                    .modal-body
+                        h2.modal-title C'est à l'équipe {{ currPlayer }} de jouer.
+        .modal-backdrop.fade(ng-class="{in: modal !== null}")

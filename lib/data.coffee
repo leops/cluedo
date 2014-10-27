@@ -56,7 +56,6 @@ exports.roomData = roomData = {
         x: 45
         y: 87
         exits: [
-            {x: 14, y: 20}
             {x: 17, y: 10}
             {x: 17, y: 11}
         ]
@@ -88,9 +87,9 @@ exports.roomData = roomData = {
         y: 20
         exits: [
             {x: 5, y: 6}
-            {x: 5, y: 15}
             {x: 8, y: 8}
             {x: 8, y: 13}
+            {x: 5, y: 15}
         ]
     "petitSalon":
         name: "Petit Salon"

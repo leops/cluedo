@@ -11,6 +11,13 @@ html(lang="fr" ng-app="ClueApp")
         script(src="/bower/bootstrap.min.js")
         script(src="app.js")
         script(src="plateau.js")
+        style.
+            .modal-header .modal-title {
+                font-size: 4em;
+            }
+            .modal-body {
+                font-size: 2em;
+            }
     body(ng-controller="PlateauCtrl" ng-cloak)
         .container
             include plateau-svg
@@ -37,30 +44,30 @@ html(lang="fr" ng-app="ClueApp")
                                     figure.face-4 4
                                     figure.face-5 5
                                     figure.face-6 6
-        .modal.fade#propModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'prop'}")
+        .modal.modal-large.fade#propModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'prop'}")
             .modal-dialog
-                .modal-content
+                .modal-content.text-center
                     .modal-header
                         h4.modal-title Hypothèse de l'équipe {{ currProp.team }}
                     .modal-body
                         p Le meutre a été commis par {{ currProp.info.suspect }} avec l'arme {{ currProp.info.weapon }} dans la pièce {{ currProp.info.room }}
-        .modal.fade#winModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'won'}")
+        .modal.modal-large.fade#winModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'won'}")
             .modal-dialog
-                .modal-content
+                .modal-content.text-center
                     .modal-header
                         h4.modal-title L'équipe {{ winner.team }} a résolu l'énigme.
                     .modal-body
                         p Le meurtre avait été commis par {{ winner.res.murderer }} avec l'arme {{ winner.res.weapon }} dans la pièce {{ winner.res.room }}.
-        .modal.fade#loseModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'lost'}")
+        .modal.modal-large.fade#loseModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'lost'}")
             .modal-dialog
                 .modal-content
-                    .modal-body
+                    .modal-body.text-center
                         h2.modal-title L'équipe {{ loser }} n'a pas trouvé la bonne réponse et est éliminée.
                     .modal-footer
                         button.btn.btn-primary(type="button" ng-click="dismissLost()") Continuer
-        .modal.fade#turnModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'turn'}")
+        .modal.modal-large.fade#turnModal(tabindex="-1" role="dialog" ng-class="{in: modal === 'turn'}")
             .modal-dialog
                 .modal-content
-                    .modal-body
+                    .modal-body.text-center
                         h2.modal-title C'est à l'équipe {{ currPlayer }} de jouer.
         .modal-backdrop.fade(ng-class="{in: modal !== null}")

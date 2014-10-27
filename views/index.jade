@@ -45,14 +45,16 @@ html(lang="fr" ng-app="ClueApp")
                         .form-group
                             .col-sm-offset-2.col-sm-10
                                 button.btn.btn-primary(type="button" ng-click="!!room ? validateProp() : sendAccuse()") Valider
-            .row(ng-show="view == 'move'")
-                include plateau-svg
-            .row(ng-show="view == 'refute'")
-                h2 Montrer un carte:
-                .btn-group
-                    button.btn.btn-primary(type="button" ng-repeat="card in refute" ng-click="doRefute(card)") {{card}}
-                    button.btn.btn-primary(type="button" ng-if="refute.length == 0" ng-click="doRefute(null)") Ne pas montrer de carte
-            .row(ng-show="view == 'list' || view == 'propose'")
+            .row.panel-default(ng-show="view == 'move'")
+                .panel-body
+                    include plateau-svg
+            .row.panel-default(ng-show="view == 'refute'")
+                .panel-body
+                    h2 Montrer un carte:
+                    .btn-group
+                        button.btn.btn-primary(type="button" ng-repeat="card in refute" ng-click="doRefute(card)") {{card}}
+                        button.btn.btn-primary(type="button" ng-if="refute.length == 0" ng-click="doRefute(null)") Ne pas montrer de carte
+            .row
                 ul.list-group(ng-repeat="c in cat" ng-init="category = cards[c]")
                         li.list-group-item(ng-repeat="name in category" ng-class="{'list-group-item-success': data[name].owned, 'list-group-item-info': data[name].seen}")
                             .checkbox

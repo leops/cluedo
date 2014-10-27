@@ -5,7 +5,7 @@ Un jeu familial (avec des morts)
 
 # Qu'est ce que c'est quoi
 Ceci est une version actualisée du classique jeu de société "Cluedo",
-inspir& par la série "Sherlock". Sa particularité est d'être joué en utilisant
+inspiré par la série "Sherlock". Sa particularité est d'être joué en utilisant
 des smartphones a la place des vieux papier et crayons
 
 # Installation

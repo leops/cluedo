@@ -2,6 +2,9 @@ angular.module('ClueApp')
 .controller('PlateauCtrl', ($scope, socket) ->
     socket.init '/plateau'
 
+    socket.on 'id', (data) ->
+        console.log data
+
     $scope.modal = 'start'
     $scope.pions = {}
 

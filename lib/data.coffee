@@ -33,12 +33,12 @@ exports.pions =
         color: "#FF851B"
 
 exports.suspects = suspects = [
-    "Leblanc A",
-    "Leblanc B",
-    "Leblanc C",
-    "Leblanc D",
-    "Leblanc E",
-    "Leblanc F"
+    "Colonel Moutarde",
+    "Reverend Olive",
+    "Madame Pervenche",
+    "Professeur Violet",
+    "Mademoiselle Rose",
+    "Madame Leblanc"
 ]
 
 exports.weapons = weapons = [

@@ -61,18 +61,18 @@ html(lang="fr" ng-app="ClueApp")
                                 label
                                     input(type="checkbox" ng-model="data[name].checked")
                                     | {{ name }}
-        .modal.fade#peekModal(tabindex="-1" role="dialog" ng-class="{in: showPeek}")
+        .modal.fade#peekModal(tabindex="-1" role="dialog" ng-class="{in: modal == 'peek'}")
             .modal-dialog
                 .modal-content
                     .modal-header
                         h4.modal-title Hypothèse infirmée
-                        button(type="button" class="close" ng-click="closePeek()")
+                        button(type="button" class="close" ng-click="modal = null")
                             span(aria-hidden="true") &times;
                             span.sr-only Fermer
                     .modal-body
                         p L'équipe {{ peekTeam }} vous a montré la carte {{ peekCard }}.
                     .modal-footer
-                        button.btn.btn-primary(ng-click="closePeek()") Fermer
+                        button.btn.btn-primary(ng-click="modal = null") Fermer
         .modal.fade#winModal(tabindex="-1" role="dialog" ng-class="{in: solution === true}")
             .modal-dialog
                 .modal-content
@@ -90,4 +90,16 @@ html(lang="fr" ng-app="ClueApp")
                         p Il ne s'agissait pas de la bonne solution, vous êtes désormais éliminé.
                     .modal-footer
                         button.btn.btn-primary(ng-click="closeLose()") Fermer
-        .modal-backdrop.fade(ng-class="{in: showPeek || ((!hideLose) && solution !== null)}")
+        .modal.fade#peekModal(tabindex="-1" role="dialog" ng-class="{in: modal == 'noPeek'}")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        h4.modal-title Hypothèse
+                        button(type="button" class="close" ng-click="modal = null")
+                            span(aria-hidden="true") &times;
+                            span.sr-only Fermer
+                    .modal-body
+                        p Aucune équipe n'a réfuté votre hypothèse
+                    .modal-footer
+                        button.btn.btn-primary(ng-click="modal = null") Fermer
+        .modal-backdrop.fade(ng-class="{in: modal !== null || ((!hideLose) && solution !== null)}")

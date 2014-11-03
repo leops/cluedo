@@ -28,11 +28,7 @@ solution =
 
 cards = suspects.concat(weapons).concat(rooms)
 
-#console.log solution
-
 Array::shuffle = ->
-    j = null
-    x = null
     i = @length
     while i
         j = Math.floor Math.random() * i
@@ -82,7 +78,6 @@ turn  = (id) ->
                     teams[id].lost = true
                     nextTurn()
         else
-            # Jet de dé
             d1 = Math.floor(Math.random() * 6) + 1
             d2 = Math.floor(Math.random() * 6) + 1
             if team.pion.room?
@@ -103,7 +98,6 @@ turn  = (id) ->
                 res = utils.testCell team.pion.x, team.pion.y, (d1 + d2)
             plateau.emit 'roll', {d1: d1, d2: d2}
             team.socket.emit 'roll', res, (req) ->
-                # Choix de la case
                 res = {
                     id: id
                 }
@@ -122,7 +116,6 @@ turn  = (id) ->
                 team.pion.y = res.y
 
                 if req.room?
-                    # Proposition
                     team.socket.emit 'proposition', req.room, (prop) ->
                         plateau.emit 'prop', {
                             team: id
@@ -131,7 +124,6 @@ turn  = (id) ->
                         prop.room = data.roomData[prop.room].name
                         index = teamID.indexOf id
                         teamList = teamID.slice(index + 1, teamID.length).concat(teamID.slice(0, index))
-                        console.log 'prop', id, prop
                         async.eachSeries teamList, (locId, cb) ->
                             if locId is id
                                 cb null
@@ -149,30 +141,36 @@ turn  = (id) ->
                                             cb card
                                 else
                                     cb null
-                        , ->
+                        , (card) ->
+                            unless card?
+                                team.socket.emit 'noPeek', null
                             plateau.emit 'doneProp'
                             nextTurn()
                 else
                     setTimeout nextTurn, 1500
 
 plateau.on 'connection', (socket) ->
+    id = _.uniqueId()
+    console.log id
+
     socket.on 'start', ->
         if teamNum >= 3
             started = true
             cardNum = (cards.length - 1) / teamNum
 
-            #console.log teams
             for key, team of teams
                 if team?
                     for i in [0 .. cardNum]
                         card = utils.pickArray cards
-                        team.cards[card].owned = true
+                        team.cards[card] = {
+                            owned: true
+                        }
                     team.socket.emit 'cards', team.cards
-                    #console.log 'Cards for %s:', key, team.cards
                 else
                     delete teams[key]
-            #console.log teams
             turn teamID[0]
+
+    socket.emit 'id', id
 
     for key, value of teams when value?
         socket.emit 'add', {key: key, value: value.pion}
@@ -182,7 +180,6 @@ players.on 'connection', (socket) ->
         team = getTeam socket
         plateau.emit 'add', {key: team, value: teams[team].pion}
         socket.emit 'team', team
-        console.log 'Team %s joined', team
 
         socket.on 'disconnect', ->
             teams[team] = null

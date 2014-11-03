@@ -8,6 +8,7 @@ angular.module('ClueApp')
     $scope.propWeapon = null
     $scope.propRoom = null
     $scope.solution = null
+    $scope.modal = null
 
     $scope.accuse = ->
         console.log 'accuse'
@@ -113,16 +114,16 @@ angular.module('ClueApp')
             $scope.view = 'list'
             cb card
 
-    $scope.closePeek = ->
-        $scope.showPeek = false
-
     $scope.closeLose = ->
         $scope.hideLose = true
 
     socket.on 'peek', (data) ->
         $scope.peekTeam = data.from
         $scope.peekCard = data.card
-        $scope.showPeek = true
+        $scope.modal = 'peek'
         console.log 'peek', $scope.data[data.card], data, $scope.data
         $scope.data[data.card].seen = true
+
+    socket.on 'noPeek', ->
+        $scope.modal = 'noPeek'
 )

@@ -114,9 +114,6 @@ angular.module('ClueApp')
             $scope.view = 'list'
             cb card
 
-    $scope.closeLose = ->
-        $scope.hideLose = true
-
     socket.on 'peek', (data) ->
         $scope.peekTeam = data.from
         $scope.peekCard = data.card

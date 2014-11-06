@@ -7,7 +7,6 @@ utils = require './utils'
 app.set 'view engine', 'jade'
 
 app.locals.showCell = utils.showCell
-app.locals.addrCode = QRCode.toDataURL 'http://' + utils.getIP() + ':3000/', 4
 
 app.use express.static('assets')
 
@@ -15,6 +14,7 @@ app.get '/', (req, res) ->
     res.render 'index'
 
 app.get '/plateau', (req, res) ->
+    res.locals.addrCode = QRCode.toDataURL 'http://' + req.headers.host + '/', 4
     res.render 'plateau'
 
 app.get '/data', (req, res) ->

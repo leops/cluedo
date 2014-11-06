@@ -83,13 +83,13 @@ html(lang="fr" ng-app="ClueApp")
                 .modal-content
                     .modal-header
                         h4.modal-title Game Over
-                        button(type="button" class="close" ng-click="closeLose()")
+                        button(type="button" class="close" ng-click="hideLose = true")
                             span(aria-hidden="true") &times;
                             span.sr-only Fermer
                     .modal-body
                         p Il ne s'agissait pas de la bonne solution, vous êtes désormais éliminé.
                     .modal-footer
-                        button.btn.btn-primary(ng-click="closeLose()") Fermer
+                        button.btn.btn-primary(ng-click="hideLose = true") Fermer
         .modal.fade#peekModal(tabindex="-1" role="dialog" ng-class="{in: modal == 'noPeek'}")
             .modal-dialog
                 .modal-content

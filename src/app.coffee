@@ -1,3 +1,4 @@
+window.onbeforeunload = -> "Il est impossible de revenir dans une partie en cours"
 angular.module('ClueApp', [])
 .filter('length', -> (obj) ->
     keys = Object.keys obj

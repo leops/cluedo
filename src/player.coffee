@@ -1,6 +1,6 @@
 angular.module('ClueApp')
 .controller('PlayerCtrl', ($scope, socket) ->
-    socket.init '/player'
+    socket.init 'player'
     $scope.team = "en cours d'attribution"
     data = window.clueData
     $scope.view = 'list'

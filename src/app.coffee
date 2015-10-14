@@ -15,7 +15,7 @@ angular.module('ClueApp', [])
     events = []
     return {
         socket: null
-        init: (nsp) ->
+        init: (nsp = '') ->
             @socket = io location + nsp,
                 reconnection: false
             for event in events

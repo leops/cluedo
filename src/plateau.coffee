@@ -1,6 +1,6 @@
 angular.module('ClueApp')
 .controller('PlateauCtrl', ($scope, socket) ->
-    socket.init 'plateau'
+    socket.init()
 
     socket.on 'id', (data) ->
         console.log data
